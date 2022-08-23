@@ -21,6 +21,16 @@
 				<image class="tips-icon" src="/static/icon_prompt.png"></image>
 				<text class="tips-text">托盘货物详情信息，包括订单号及内容</text>
 			</view>
+			<view class="choose-box">
+				<view class="choose-flex">
+					<view class="choose-item">
+						<uni-data-checkbox multiple v-model="radioChecked" :localdata="[{
+								text: '托盘携带钢管',
+								value: '托盘携带钢管'
+							}]"></uni-data-checkbox>
+					</view>
+				</view>
+			</view>
 			<view class="footerBtn-tips">
 				<footerBtnList :btnList="footerBtn"></footerBtnList>
 			</view>
@@ -58,6 +68,7 @@
 				],
 				leftListData: [],
 				sideListData: [],
+				radioChecked: ['托盘携带钢管'],
 			};
 		},
 		methods: {
@@ -78,21 +89,26 @@
 				});
 			},
 			openType() {
+				if (this.radioChecked.some(_ => _ == "托盘携带钢管")) {
+					this.tipword = "是否确认托盘携带钢管？";
+				} else {
+					this.tipword = "是否确认托盘未携带钢管？";
+				}
 				this.tipchange = true;
-				this.tipword = "是否确认托盘回库？";
 				this.ptype = true;
 			},
 			callBack() {
 				if (this.ptype) {
 					let data = {
 						TaskId: Number(this._id),
+						IsExistsSteel: this.radioChecked.some(_ => _ == "托盘携带钢管")
 					};
 					console.log(data)
 					PDA_CallTrayBack(data)
 						.then((res) => {
 							if (res.responseCode == 0) {
 								this.tipchange = true;
-								this.tipword = "托盘回库任务生成成功！";
+								this.tipword = "出库成功！托盘回库！";
 								this.backType = true;
 							} else {
 								this.tipchange = true;
@@ -223,7 +239,7 @@
 		box-sizing: border-box;
 		position: fixed;
 		left: 10px;
-		bottom: 55px;
+		bottom: 85px;
 		display: flex;
 		justify-content: flex-start;
 		padding-left: 10px;
@@ -245,5 +261,24 @@
 		width: 100%;
 		height: auto;
 		margin-bottom: 10px;
+	}
+
+	.choose-box {
+		width: 100%;
+		height: 30px;
+
+	}
+
+	.choose-flex {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.choose-item {
+		width: 130px;
+		height: 20px;
 	}
 </style>

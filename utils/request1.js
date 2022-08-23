@@ -1,13 +1,4 @@
-// import $toast from '../js/toast.js'
-
-// 全局请求封装
-//#ifdef APP-PLUS
-const apiUrl = 'http://192.168.2.120:8081' //web ip
-//#endif
-//#ifndef APP-PLUS
-const apiUrl = 'http://192.168.2.120:8081'
-//#endif
-
+import urlConfig from './config.js'
 const baseRequest = (url,method,data) => {
 	//请求拦截
 	uni.showLoading({
@@ -27,7 +18,7 @@ const baseRequest = (url,method,data) => {
 		    success: function (res) {
 				if(res.networkType != 'none'){
 					uni.request({
-						url: apiUrl + url,
+						url: urlConfig + url,
 						data: data,
 						method: method,
 						timeout:timer,
